@@ -1,0 +1,15 @@
+/home/ubuntu/projects/EnigmaCS/bin/Debug/net7.0/EnigmaCS
+/home/ubuntu/projects/EnigmaCS/bin/Debug/net7.0/EnigmaCS.deps.json
+/home/ubuntu/projects/EnigmaCS/bin/Debug/net7.0/EnigmaCS.runtimeconfig.json
+/home/ubuntu/projects/EnigmaCS/bin/Debug/net7.0/EnigmaCS.dll
+/home/ubuntu/projects/EnigmaCS/bin/Debug/net7.0/EnigmaCS.pdb
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.csproj.AssemblyReference.cache
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.GeneratedMSBuildEditorConfig.editorconfig
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.AssemblyInfoInputs.cache
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.AssemblyInfo.cs
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.csproj.CoreCompileInputs.cache
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.dll
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/refint/EnigmaCS.dll
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.pdb
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/EnigmaCS.genruntimeconfig.cache
+/home/ubuntu/projects/EnigmaCS/obj/Debug/net7.0/ref/EnigmaCS.dll
