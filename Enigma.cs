@@ -16,9 +16,14 @@ class Enigma
         {
             return engine.GetNewLetter(letter);
         }
-
-        public Engine GetEngine()
+        
+        public void SwithLang(string lang)
         {
-            return engine;
+            engine.SetLang(lang);
+        }
+
+        public string GetLang()
+        {
+            return engine.lang;
         }
     }

@@ -1,39 +1,27 @@
 using Rotorclass;
-
+using languages;
 namespace Engineclass;
 class Engine
     {
+        public char[] Key = new char[3];
         private Rotor InputRotor = new Rotor();
         private Rotor OutputRotor = new Rotor();
-
-        private List<Rotor> Rotors = new List<Rotor>() 
-        { 
+        private Rotor Reflector = new Rotor();
+        private Dictionary<char, char> RotorDictRef;
+        private Dictionary<char, char> RotorDictStd;
+        private List<Rotor> Rotors = new List<Rotor>()
+        {
             new Rotor(), new Rotor(), new Rotor()
         };
-
-        private Rotor Reflector = new Rotor();
-
-        private Dictionary<char, char> RotorDictRef = new Dictionary<char, char>() 
+        public string lang;
+        private Languages languages = new Languages();
+        
+        public Engine()
         {
-            {'a', 'f'}, {'b', 'g'}, {'c', 'h'}, {'d', 'i'}, {'e', 'j'},
-            {'f', 'a'}, {'g', 'b'}, {'h', 'c'}, {'i', 'd'}, {'j', 'e'},
-            {'k', 'p'}, {'l', 'q'}, {'m', 'r'}, {'n', 's'}, {'o', 't'},
-            {'p', 'k'}, {'q', 'l'}, {'r', 'm'}, {'s', 'n'}, {'t', 'o'},
-            {'u', 'v'}, {'v', 'u'}, {'w', 'x'}, {'x', 'w'}, {'y', 'z'},
-            {'z', 'y'}, {' ', ' '} 
-        };
-
-        private Dictionary<char, char> RotorDictStd = new Dictionary<char, char>()
-        {
-            {'a', 'a'}, {'b', 'b'}, {'c', 'c'}, {'d', 'd'}, {'e', 'e'},
-            {'f', 'f'}, {'g', 'g'}, {'h', 'h'}, {'i', 'i'}, {'j', 'j'},
-            {'k', 'k'}, {'l', 'l'}, {'m', 'm'}, {'n', 'n'}, {'o', 'o'},
-            {'p', 'p'}, {'q', 'q'}, {'r', 'r'}, {'s', 's'}, {'t', 't'},
-            {'u', 'u'}, {'v', 'v'}, {'w', 'w'}, {'x', 'x'}, {'y', 'y'},
-            {'z', 'z'}, {' ', ' '}
-        };
-
-        public char[] Key = new char[3];
+            RotorDictRef = languages.EnRDictRef;
+            RotorDictStd = languages.EnRDictStd;
+            lang = "en";
+        }
 
         private char RotorCommutation(char letter, Rotor outputRotor, Rotor inputRotor)
         {
@@ -68,59 +56,61 @@ class Engine
             }
         }
 
-        private char RotorPipeLine(char letter, List<Rotor> Rotors) 
-        {
-            char result = RotorCommutation(letter, InputRotor, Rotors[0]);
-
-            for(int i = 0; i < Rotors.Count - 1; i++)
-            {
-                result = RotorCommutation(result, Rotors[i], Rotors[i + 1]);
-            }
-
-            result = RotorCommutation(result, Rotors[Rotors.Count - 1], OutputRotor);
-
-            return result;
-
-        }
-
-        private char RotorPipeLine(char letter, Rotor Reflector, List<Rotor> Rotors)
-        {
-            char result = RotorCommutation(letter, InputRotor, Rotors[0]);
-
-            for (int i = 0; i < Rotors.Count - 1; i++)
-            {
-                result = RotorCommutation(result, Rotors[i], Rotors[i + 1]);
-            }
-
-            result = RotorCommutation(result, Rotors[Rotors.Count - 1], Reflector);
-
-            result = RotorCommutation(result, Reflector, Rotors[Rotors.Count - 1]);
-
-            for (int i = Rotors.Count - 1; i > 1; i--)
-            {
-                result = RotorCommutation(result, Rotors[i], Rotors[i - 1]);
-            }
-
-            result = RotorCommutation(result, Rotors[0], InputRotor);
-
-            return result;
-
-        }
-
         public char GetNewLetter(char letter)
         {
             TurnRotor();
+            try
+            {
+                char firstRes = RotorCommutation(letter, InputRotor, Rotors[0]);
+                char secondRes = RotorCommutation(firstRes, Rotors[0], Rotors[1]);
+                char thirdRes = RotorCommutation(secondRes, Rotors[1], Rotors[2]);
+                char reflectedRes = RotorCommutation(thirdRes, Rotors[2], Reflector);
+                char fourthRes = RotorCommutation(reflectedRes, Reflector, Rotors[2]);
+                char fifthRes = RotorCommutation(fourthRes, Rotors[2], Rotors[1]);
+                char sixthRes = RotorCommutation(fifthRes, Rotors[1], Rotors[0]);
+                char seventhRes = RotorCommutation(sixthRes, Rotors[0], InputRotor);
 
-            char firstRes = RotorCommutation(letter, InputRotor, Rotors[0]);
-            char secondRes = RotorCommutation(firstRes, Rotors[0], Rotors[1]);
-            char thirdRes = RotorCommutation(secondRes, Rotors[1], Rotors[2]);
-            char reflectedRes = RotorCommutation(thirdRes, Rotors[2], Reflector);
-            char fourthRes = RotorCommutation(reflectedRes, Reflector, Rotors[2]);
-            char fifthRes = RotorCommutation(fourthRes, Rotors[2], Rotors[1]);
-            char sixthRes = RotorCommutation(fifthRes, Rotors[1], Rotors[0]);
-            char seventhRes = RotorCommutation(sixthRes, Rotors[0], InputRotor);
-            //char result = RotorPipeLine(letter, Reflector, Rotors);
+                return seventhRes;
+            }
 
-            return seventhRes;
+            catch
+            {
+                throw new ArgumentException("RotorCommutation error");
+            }
+                        
+        }
+
+        public void SetLang(string lang)
+        {
+            switch (lang)
+            {
+                case "ru":
+                    RotorDictStd = languages.RuRDictStd;
+                    RotorDictRef = languages.RuRDictRef;
+                    InputRotor.Lang(languages.RuRLine, languages.RuRDict);
+                    OutputRotor.Lang(languages.RuRLine, languages.RuRDict);
+                    Reflector.Lang(languages.RuRLine, languages.RuRDict);
+                    foreach (Rotor i in Rotors)
+                        i.Lang(languages.RuRLine, languages.RuRDict);
+                    this.lang = "ru";
+                    Console.WriteLine("Теперь вы можете шифровать сообщения на Русском языке.");
+                    break;
+
+                case "en":
+                    RotorDictStd = languages.EnRDictStd;
+                    RotorDictRef = languages.EnRDictRef;
+                    InputRotor.Lang(languages.EnRLine, languages.EnRDict);
+                    OutputRotor.Lang(languages.EnRLine, languages.EnRDict);
+                    Reflector.Lang(languages.EnRLine, languages.EnRDict);
+                    foreach (Rotor i in Rotors)
+                        i.Lang(languages.EnRLine, languages.EnRDict);
+                    this.lang = "en";
+                    Console.WriteLine("Now you can encrypt messages in English");
+                    break;
+
+                default:
+                    Console.WriteLine("Enigma doesn't support this language.");
+                    break;
+            }
         }
     }
