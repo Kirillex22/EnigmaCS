@@ -1,12 +1,12 @@
-﻿using Enigmaclass;
+﻿using EnigmaLib;
 
-namespace program;
+namespace Program;
 internal class Program
 {
 
     static void Main(string[] args)
         {
-            char[] input;
+            string input;
             Enigma enigma = new Enigma();
             char pressedKey;
             bool opened = true;
@@ -34,14 +34,10 @@ internal class Program
                         {
                             Console.WriteLine("Ввод сообщения: ");
                             Console.WriteLine();
-                            input = Console.ReadLine().ToLower().ToCharArray();
-                            char[] result = new char[input.Length];
-                            int k = 0;
-                            foreach (char i in input)
-                            {
-                                result[k] = enigma.Ecnrypt(i);
-                                k++;
-                            }
+                            input = Console.ReadLine();
+
+                            string result = enigma.Encrypt(input);
+                           
                             Console.WriteLine();
                             Console.WriteLine("Зашифрованное сообщение");
                             Console.WriteLine();

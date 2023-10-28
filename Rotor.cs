@@ -1,96 +1,141 @@
-using languages;
-namespace Rotorclass;
-class Rotor
-    {
-       private Languages languages = new Languages();
-        private char[] RotorLine;
-        private Dictionary<char, char> RotorDict;
-        public char Key;
-        public int RoundCounter = 0;
+using static MyConstants.Constants;
 
-        public Rotor()
-        {
-            RotorLine = languages.EnRLine;
-            RotorDict = languages.EnRDict;
-            Key = 'a';
-        }
+namespace EnigmaLib
+{
+    public class Rotor
+    {
+        public string Name = Empty;
+
+        private char[] RotorLine;
+
+        private Dictionary<char, char> RotorDict;
+
+        public char? Key;
+
+        public int RoundCounter = StartPoint;
+
 
         public void SetRotorKey(char Key)
         {
+            RoundCounter = StartPoint;
+
             if (Array.IndexOf(RotorLine, Key) == -1)
-                throw new ArgumentException("Language is different");
+                throw new ArgumentException("SetRotorKey error");
+
             this.Key = Key;
             int displacement = Array.IndexOf(RotorLine, Key);
-            while(displacement != 0)
+
+            while (displacement != 0)
             {
-                Turn();
+                Turn(Initial);
                 displacement--;
             }
+
         }
 
-        private void SetRoundCounter()
+
+        private void Counter()
         {
             if (RoundCounter == RotorLine.Length)
-                RoundCounter = 0;
+                RoundCounter = StartPoint;
             else
                 RoundCounter++;
         }
+
+
+        public void Spin(char startLetter)
+        {
+            for (int i = 0; i < RotorLine.Length; i++)
+            {
+                if (i == RotorLine.Length - 1)
+                    RotorLine[i] = startLetter;
+                else
+                    RotorLine[i] = RotorLine[i + 1];
+            }
+            
+        }
+
 
         public void Turn()
         {
             try
             {
-                char startLetter = RotorLine[0];
-                SetRoundCounter();
+                char startLetter = RotorLine[StartPoint];
 
-                for (int i = 0; i < RotorLine.Length; i++)
+                Counter();
+
+                Spin(startLetter);
+            }
+
+            catch
+            {
+                throw new ArgumentException("Turn error");
+            }
+
+        }
+
+
+        public void Turn(int freedomVal)
+        {
+            if (freedomVal == Initial)
+            {
+                try
                 {
-                    if (i == RotorLine.Length - 1)
-                        RotorLine[i] = startLetter;
-                    else
-                        RotorLine[i] = RotorLine[i + 1];
+                    char startLetter = RotorLine[StartPoint];                  
+
+                    Spin(startLetter);
+                }
+
+                catch
+                {
+                    throw new ArgumentException("Turn error");
                 }
             }
 
-            catch
-            {
-                throw new ArgumentException("Rotor's turn error");
-            }
-            
         }
 
-        public char GetLetter(char letter)
+
+        public char Commutate(char letter)
         {
-            try
-            {
-                return RotorDict.GetValueOrDefault(letter);
-            }
+            char result = RotorDict.GetValueOrDefault(letter);
 
-            catch
-            {
-                throw new ArgumentException("Letter getting error");
-            }
-             
+            if (result != default)
+                return result;
+            else
+                throw new ArgumentException("Commutate error");
         }
+
 
         public void SetRotorDict(Dictionary<char, char> RotorDict)
         {
             this.RotorDict = RotorDict;
         }
 
+
         public char[] GetRotorLine()
         {
-            return RotorLine;
+            if (RotorLine != null)
+                return RotorLine;
+            else
+                throw new Exception("GetRotorLine error");
         }
 
-        public char CheckKey()
-        {
-            return Key;
-        }
 
-        public void Lang(char[] RotorLine, Dictionary<char, char> RotorDict)
+        public void Lang(char[] RotorLine, Dictionary<char, char> RotorDict, char Key)
         {
             this.RotorLine = RotorLine;
             this.RotorDict = RotorDict;
+            this.Key = Key;
+        }
+
+
+        public void SetRotorLineDefault(string Lang)
+        { 
+            if (Lang == Russian)
+                RotorLine = Languages.RuRLine;
+            else if (Lang == English)
+                RotorLine = Languages.EnRLine;
         }
     }
+
+}

@@ -1,29 +1,62 @@
-using Engineclass;
+using static MyConstants.Constants;
 
-namespace Enigmaclass;
-
-class Enigma
+namespace EnigmaLib
+{
+    public class Enigma
     {
-        private Engine engine = new Engine();
+        private Engine MyEngine = new();
+
+        private string Key = Default;
+
+
+        public Enigma()
+        {
+            SetKey(Key);
+        }
+
 
         public void SetKey(string Key)
         {
-            engine.Key = Key.ToCharArray();
-            engine.Init();
+            this.Key = Key;
+            Reboot();
         }
 
-        public char Ecnrypt(char letter)
+
+        public char Encrypt(char letter)
         {
-            return engine.GetNewLetter(letter);
+            return MyEngine.GetNewLetter(letter);
         }
-        
-        public void SwithLang(string lang)
+
+
+        public string Encrypt(string message)
         {
-            engine.SetLang(lang);
+            string result = Empty; 
+
+            foreach (char i in message)
+                result += MyEngine.GetNewLetter(i);
+
+            return result;
         }
+
+
+        public void Reboot()
+        {
+            char[] NewKey = Key.ToCharArray();
+            MyEngine.Key = NewKey;
+            MyEngine.Init();
+        }
+
+
+        public void SwithLang(string Lang)
+        {
+            MyEngine.SetLang(Lang);
+        }
+
 
         public string GetLang()
         {
-            return engine.lang;
+            return MyEngine.Lang;
         }
+
     }
+}
